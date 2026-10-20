@@ -1,0 +1,36 @@
+[package]
+name = "mlp-demo-lane"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "The demo's lane: a sender, a lossy link, and the words between them."
+license = "Apache-2.0"
+publish = false
+
+[dependencies]
+# The published protocol, pinned by revision: the demo consumes it the way any
+# consumer does, and never carries a copy of it. The `testing` feature is the
+# crate's own deterministic harness, which is where its lossy link lives.
+mlp-core = { git = "https://github.com/medialaneprotocol/mlp-core", rev = "d1c257d0bed5e2ae23371217cde8bda87f0656aa", features = ["testing"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_debug_implementations = "warn"
+rust_2018_idioms = { level = "deny", priority = -1 }
+unreachable_pub = "warn"
+unused_qualifications = "warn"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+cast_possible_truncation = "allow"
+cast_precision_loss = "allow"
+cast_sign_loss = "allow"
+cast_possible_wrap = "allow"
+missing_const_for_fn = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+module_name_repetitions = "allow"
+must_use_candidate = "allow"
+similar_names = "allow"
+too_many_arguments = "allow"

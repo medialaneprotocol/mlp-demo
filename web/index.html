@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MLP — a session that carries, acknowledges and heals</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --ink: #e6e9ef;
+        --muted: #9aa3b2;
+        --line: #262b36;
+        --panel: #12151c;
+      }
+      body {
+        margin: 0;
+        padding: 2rem 1.5rem 3rem;
+        background: #0b0d12;
+        color: var(--ink);
+        font: 15px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      main {
+        max-width: 62rem;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 1.35rem;
+        font-weight: 620;
+        margin: 0 0 0.25rem;
+      }
+      p.lead {
+        color: var(--muted);
+        margin: 0 0 1.75rem;
+      }
+      .panes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+      }
+      .pane {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--panel);
+        padding: 0.85rem 1rem 1rem;
+      }
+      .pane h2 {
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 0 0 0.7rem;
+      }
+      canvas {
+        display: block;
+        image-rendering: pixelated;
+        border-radius: 4px;
+        background: #000;
+      }
+      pre {
+        margin: 1.25rem 0 0;
+        padding: 1rem 1.1rem;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--panel);
+        color: var(--ink);
+        font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+        overflow-x: auto;
+        white-space: pre-wrap;
+      }
+      #log {
+        max-height: 22rem;
+        overflow-y: auto;
+        white-space: pre;
+      }
+      footer {
+        margin-top: 1.5rem;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      a {
+        color: #7fb2ff;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>MLP — a session that carries, acknowledges and heals</h1>
+      <p class="lead">
+        The sender&rsquo;s capture is on the left; the receiver&rsquo;s surface is on the right. The
+        lane between them loses a fragment on purpose. The acknowledgement tells the sender
+        what is missing, the sender sends the cells again, and the two surfaces meet.
+      </p>
+
+      <div class="panes">
+        <section class="pane">
+          <h2>The sender&rsquo;s capture</h2>
+          <canvas id="capture" width="480" height="272"></canvas>
+        </section>
+        <section class="pane">
+          <h2>The receiver&rsquo;s surface</h2>
+          <canvas id="surface" width="480" height="272"></canvas>
+        </section>
+      </div>
+
+      <pre id="report">the lane has not started</pre>
+      <pre id="log">waiting for the lane…</pre>
+
+      <footer>
+        The protocol is the published implementation, pinned by revision — see
+        <a href="https://github.com/medialaneprotocol/mlp-core">mlp-core</a> and
+        <a href="https://github.com/medialaneprotocol/mlp-ts">mlp-ts</a>. The specification is
+        <a href="https://github.com/medialaneprotocol/mlp">mlp</a>.
+      </footer>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

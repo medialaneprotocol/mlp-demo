@@ -1,0 +1,35 @@
+{
+  "name": "mlp-demo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A demo of the Media Lane Protocol: a session that carries updates, acknowledges them, and heals a loss.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "homepage": "https://github.com/medialaneprotocol/mlp-demo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/medialaneprotocol/mlp-demo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/medialaneprotocol/mlp-demo/issues"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node scripts/serve.mjs",
+    "headless": "node scripts/headless.mjs",
+    "typecheck": "tsc --noEmit",
+    "verify": "bash scripts/verify.sh"
+  },
+  "dependencies": {
+    "@medialaneprotocol/mlp": "github:medialaneprotocol/mlp-ts#d758302034026805155d296173d4772f7935b01b",
+    "@medialaneprotocol/mlp-proto": "github:medialaneprotocol/mlp-proto#624865f57952ec4fb730fca6b14fa93a89152cda"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20.11"
+  }
+}
