@@ -437,19 +437,19 @@ fn base64(bytes: &[u8]) -> String {
     const ALPHABET: &[u8; 64] =
         b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     let mut out = String::with_capacity(bytes.len().div_ceil(3) * 4);
-    for chunk in bytes.chunks(3) {
-        let first = chunk[0];
-        let second = chunk.get(1).copied().unwrap_or(0);
-        let third = chunk.get(2).copied().unwrap_or(0);
+    for group in bytes.chunks(3) {
+        let first = group[0];
+        let second = group.get(1).copied().unwrap_or(0);
+        let third = group.get(2).copied().unwrap_or(0);
         let triple = (u32::from(first) << 16) | (u32::from(second) << 8) | u32::from(third);
         out.push(char::from(ALPHABET[(triple >> 18) as usize & 0x3f]));
         out.push(char::from(ALPHABET[(triple >> 12) as usize & 0x3f]));
-        if chunk.len() > 1 {
+        if group.len() > 1 {
             out.push(char::from(ALPHABET[(triple >> 6) as usize & 0x3f]));
         } else {
             out.push('=');
         }
-        if chunk.len() > 2 {
+        if group.len() > 2 {
             out.push(char::from(ALPHABET[triple as usize & 0x3f]));
         } else {
             out.push('=');

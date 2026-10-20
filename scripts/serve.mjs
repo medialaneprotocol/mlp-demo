@@ -28,8 +28,8 @@ function ensureLane() {
   lane = startLane();
   let buffered = "";
   lane.stdout.setEncoding("utf8");
-  lane.stdout.on("data", (chunk) => {
-    buffered += chunk;
+  lane.stdout.on("data", (piece) => {
+    buffered += piece;
     let newline = buffered.indexOf("\n");
     while (newline >= 0) {
       const line = buffered.slice(0, newline).trim();
@@ -85,8 +85,8 @@ const server = createServer((request, response) => {
   }
   if (path === "/ack" || path === "/repair") {
     let body = "";
-    request.on("data", (chunk) => {
-      body += chunk;
+    request.on("data", (piece) => {
+      body += piece;
     });
     request.on("end", () => {
       toLane(body.trim());

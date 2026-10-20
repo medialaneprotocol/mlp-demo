@@ -12,6 +12,11 @@ const capture = document.getElementById("capture") as HTMLCanvasElement;
 const surface = document.getElementById("surface") as HTMLCanvasElement;
 const log = document.getElementById("log") as HTMLPreElement;
 const report = document.getElementById("report") as HTMLPreElement;
+const again = document.getElementById("again") as HTMLButtonElement;
+
+again.addEventListener("click", () => {
+  void fetch("./run", { method: "POST" });
+});
 
 capture.width = COLS * CELL_PX;
 capture.height = ROWS * CELL_PX;
@@ -69,30 +74,36 @@ function draw(canvas: HTMLCanvasElement, cells: Uint8Array): void {
   }
 }
 
-const receiver = new LaneReceiver({
-  onAck: () => {
-    void fetch("./ack", { method: "POST", body: receiver.ackLine() });
-  },
-  onRepair: (held, reason) => {
-    void fetch("./repair", { method: "POST", body: receiver.repairLine(held, reason) });
-  },
-  onEvent: (event: ReceiverEvent) => {
-    if (event.kind === "applied") {
-      state.applied += 1;
-      note(
-        `the receiver applied update ${event.updateId}: ${event.cells} cells` +
-          (event.anchor ? " (an anchor)" : ""),
-      );
-    } else if (event.kind === "refused") {
-      note(
-        `the receiver refused update ${event.updateId}: it continues update ${event.base}, which it does not hold`,
-      );
-    } else {
-      note(`the receiver rejected a fragment: ${event.reason}`);
-    }
-    draw(surface, receiver.surface);
-  },
-});
+/** The sender's surface, and the receiver that holds the other one. */
+let captureCells: Uint8Array | null = null;
+let receiver = newReceiver();
+
+function newReceiver(): LaneReceiver {
+  return new LaneReceiver({
+    onAck: () => {
+      void fetch("./ack", { method: "POST", body: receiver.ackLine() });
+    },
+    onRepair: (held, reason) => {
+      void fetch("./repair", { method: "POST", body: receiver.repairLine(held, reason) });
+    },
+    onEvent: (event: ReceiverEvent) => {
+      if (event.kind === "applied") {
+        state.applied += 1;
+        note(
+          `the receiver applied update ${event.updateId}: ${event.cells} cells` +
+            (event.anchor ? " (an anchor)" : ""),
+        );
+      } else if (event.kind === "refused") {
+        note(
+          `the receiver refused update ${event.updateId}: it continues update ${event.base}, which it does not hold`,
+        );
+      } else {
+        note(`the receiver rejected a fragment: ${event.reason}`);
+      }
+      draw(surface, receiver.surface);
+    },
+  });
+}
 
 function fromBase64(text: string): Uint8Array {
   const binary = atob(text);
@@ -120,14 +131,36 @@ source.onmessage = (event) => {
   }
   if (kind === "CAPTURE") {
     const at = rest.indexOf(" ");
-    receiver.setCapture(fromBase64(rest.slice(at + 1)));
-    draw(capture, receiver.capture ?? new Uint8Array(0));
+    captureCells = fromBase64(rest.slice(at + 1));
+    receiver.setCapture(captureCells);
+    draw(capture, captureCells);
     draw(surface, receiver.surface);
     return;
   }
   if (kind === "NOTE") {
     const at = rest.indexOf(" ");
     const text = rest.slice(at + 1);
+    if (text.includes("the lane is live")) {
+      // A new session starts: the receiver, the counters and the surfaces
+      // belong to that session.
+      receiver = newReceiver();
+      if (captureCells !== null) {
+        receiver.setCapture(captureCells);
+      }
+      state.updates = 0;
+      state.bytes = 0;
+      state.fragments = 0;
+      state.dropped = 0;
+      state.pending = 0;
+      state.converged = false;
+      state.applied = 0;
+      state.missing = [];
+      state.done = "";
+      state.droppedAt = -1;
+      state.healedAt = -1;
+      state.pendingAfterDrop = 0;
+      draw(surface, receiver.surface);
+    }
     if (text.includes("dropped a fragment")) {
       state.droppedAt = Number.parseInt(rest.slice(0, at), 10);
     }

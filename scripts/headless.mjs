@@ -46,8 +46,8 @@ const receiver = new LaneReceiver({
 
 let buffered = "";
 lane.stdout.setEncoding("utf8");
-lane.stdout.on("data", (chunk) => {
-  buffered += chunk;
+lane.stdout.on("data", (piece) => {
+  buffered += piece;
   let newline = buffered.indexOf("\n");
   while (newline >= 0) {
     const line = buffered.slice(0, newline).trim();

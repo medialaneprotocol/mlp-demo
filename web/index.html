@@ -78,7 +78,18 @@
         color: var(--muted);
         font-size: 0.85rem;
       }
-      a {
+      button {
+        background: #1c2230;
+        color: var(--ink);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 0.45rem 0.9rem;
+        font: inherit;
+        cursor: pointer;
+      }
+      button:hover {
+        border-color: #3b4459;
+      }      a {
         color: #7fb2ff;
       }
     </style>
@@ -104,6 +115,9 @@
       </div>
 
       <pre id="report">the lane has not started</pre>
+      <p>
+        <button id="again" type="button">Run the session again</button>
+      </p>
       <pre id="log">waiting for the lane…</pre>
 
       <footer>
