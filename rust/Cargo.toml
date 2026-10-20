@@ -9,9 +9,11 @@ publish = false
 
 [dependencies]
 # The published protocol, pinned by revision: the demo consumes it the way any
-# consumer does, and never carries a copy of it. The `testing` feature is the
-# crate's own deterministic harness, which is where its lossy link lives.
-mlp-core = { git = "https://github.com/medialaneprotocol/mlp-core", rev = "d1c257d0bed5e2ae23371217cde8bda87f0656aa", features = ["testing"] }
+# consumer does, and never carries a copy of it.
+mlp-core = { git = "https://github.com/medialaneprotocol/mlp-core", rev = "52881686c1df2770f8c3a7421002ba80ecf29979" }
+# The protocol's verification layer, pinned by revision as well: the link
+# model lives there, not in the core.
+mlp-harness = { git = "https://github.com/medialaneprotocol/mlp-harness", rev = "61b4f47a8fe42d56b0be0ae699c3217a4e507723" }
 
 [lints.rust]
 unsafe_code = "forbid"

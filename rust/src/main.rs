@@ -1,8 +1,8 @@
 //! The demo's lane: the sender, the lossy link, and the words between them.
 //!
 //! The lane is the sender's half of a media lane. It produces updates from a
-//! capture, hands them to the crate's own lossy link, and reports what it
-//! released. The receiver is the browser: it decodes the fragments with the
+//! capture, hands them to the verification layer's own link, and reports what
+//! it released. The receiver is the browser: it decodes the fragments with the
 //! published browser package, applies them, and acknowledges what it applied.
 //!
 //! The lane speaks a line protocol, one line per event, on stdout:
@@ -34,7 +34,7 @@ use mlp_core::media::sender::{
     EnqueueOutcome, MediaSenderConfig, MediaSenderMachine, MediaSenderEvent, UpdateRequest,
 };
 use mlp_core::media::MediaAck;
-use mlp_core::testing::lossy_link::{Endpoint, LinkProfile, LossyLink, Tier};
+use mlp_harness::link::{Direction, Link, LinkProfile, LossModel, OfferOutcome, Tier};
 
 /// The captured surface, in cells.
 const WIDTH: u32 = 1920;
@@ -56,7 +56,7 @@ const SETTLE_MS: u64 = 400;
 /// The lane.
 struct Lane {
     sender: MediaSenderMachine,
-    link: LossyLink,
+    link: Link,
     capture: Vec<u8>,
     changed: Vec<u32>,
     now_ms: u64,
@@ -80,10 +80,11 @@ impl Lane {
         let mut profile = LinkProfile::tier(Tier::T2);
         // The lane's own loss is the one it drops on purpose; the link itself
         // carries everything with the tier's delay and rate.
-        profile.loss_permille = 0;
+        profile.down.loss = LossModel::None;
+        profile.up.loss = LossModel::None;
         let epoch = Instant::now();
         let mut config = MediaSenderConfig::new(Carrier::Ws, grid);
-        config.bwe.prior_bps = Some(profile.rate_bps_down);
+        config.bwe.prior_bps = Some(profile.down.rate_bps);
         config.bwe.pace_floor_bps = 8_000;
         let sender = MediaSenderMachine::new(config, grid, epoch);
         let cols = grid.cols();
@@ -91,7 +92,7 @@ impl Lane {
             capture: vec![0; grid.cells() as usize * 3],
             changed: Vec::new(),
             sender,
-            link: LossyLink::new(profile),
+            link: Link::new(profile),
             now_ms: 0,
             epoch,
             next_capture_ms: CAPTURE_EVERY_MS,
@@ -121,8 +122,8 @@ impl Lane {
         }
         self.encode(now);
         self.release(now);
-        for delivery in self.link.advance(TICK_MS) {
-            self.emit_fragment(&delivery.bytes, delivery.at_ms);
+        for delivery in self.link.advance(TICK_MS * 1_000) {
+            self.emit_fragment(&delivery.bytes, delivery.at_us / 1_000);
         }
         let timeout_events = self.sender.handle_timeout_events(now);
         self.note_sender_events(&timeout_events);
@@ -223,7 +224,12 @@ impl Lane {
                 continue;
             }
             self.bytes_sent += fragment.bytes.len() as u64;
-            self.link.transmit(Endpoint::Sender, fragment.bytes);
+            match self.link.offer(Direction::Down, fragment.bytes) {
+                OfferOutcome::Queued { .. } => {}
+                OfferOutcome::Dropped { reason, .. } => {
+                    self.note(&format!("the link dropped a fragment: {}", reason.as_str()));
+                }
+            }
         }
     }
 

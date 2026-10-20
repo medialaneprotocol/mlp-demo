@@ -54,13 +54,13 @@ The session runs like this:
 
 ```
  300 ms  update 1 (delta) carries 6 cells
- 390 ms  the receiver acknowledged up to update 1 (0 cells stale)
+ 410 ms  the receiver acknowledged up to update 1 (0 cells stale)
  600 ms  update 2 (delta) carries 12 cells
- 730 ms  the receiver acknowledged up to update 2 (0 cells stale)
+ 680 ms  the receiver acknowledged up to update 2 (0 cells stale)
  900 ms  update 3 (delta) carries 12 cells
  900 ms  the lane dropped a fragment on purpose
 1200 ms  update 4 (anchor) carries 16 cells
-1270 ms  the receiver acknowledged up to update 4 (0 cells stale)
+1320 ms  the receiver acknowledged up to update 4 (0 cells stale)
 ```
 
 The third update never arrives. The receiver's acknowledgement does not cover
@@ -69,8 +69,9 @@ sends them again — as an anchor, because the receiver may not be able to chain
 them — and the surfaces meet. The table says how long that took.
 
 The lane drops the third fragment on purpose, so the loss is always the thing
-you see. Everything else about the link is the protocol crate's own T2
-profile: a 150 ms round trip, one megabit down, and the crate's own pacing.
+you see. Everything else about the link is the verification layer's own T2
+profile: a 150 ms round trip and one megabit down, with the sender's own
+pacing.
 
 ## The budgets
 
@@ -125,7 +126,7 @@ run.
 
 | path | what it holds |
 |---|---|
-| `rust/src/main.rs` | the lane: it captures a surface, encodes updates with the protocol's sender, carries them over the protocol's lossy link, and drops one fragment on purpose |
+| `rust/src/main.rs` | the lane: it captures a surface, encodes updates with the protocol's sender, carries them over the verification layer's link, and drops one fragment on purpose |
 | `web/receiver.ts` | the receiver: it decodes the fragments with the published browser package, applies what the protocol delivered, and acknowledges it |
 | `web/app.ts` | the browser page |
 | `web/budgets.ts` | the budgets, and where they come from |
@@ -141,9 +142,10 @@ protocol's own bytes travel inside it, untouched.
 
 | what | repository | revision |
 |---|---|---|
-| the protocol (the sender) | [`mlp-core`](https://github.com/medialaneprotocol/mlp-core) | `d1c257d0bed5e2ae23371217cde8bda87f0656aa` |
-| the protocol (the browser) | [`mlp-ts`](https://github.com/medialaneprotocol/mlp-ts) | `d758302034026805155d296173d4772f7935b01b` |
-| the wire schemas | [`mlp-proto`](https://github.com/medialaneprotocol/mlp-proto) | `624865f57952ec4fb730fca6b14fa93a89152cda` |
+| the protocol (the sender) | [`mlp-core`](https://github.com/medialaneprotocol/mlp-core) | `52881686c1df2770f8c3a7421002ba80ecf29979` |
+| the protocol (the browser) | [`mlp-ts`](https://github.com/medialaneprotocol/mlp-ts) | `5a4b6617fa016f5ce186fdf2e3daaff6e141b243` |
+| the wire schemas | [`mlp-proto`](https://github.com/medialaneprotocol/mlp-proto) | `40be372b94d3b6b175450f717b75312c3995c1c3` |
+| the verification layer (the link) | [`mlp-harness`](https://github.com/medialaneprotocol/mlp-harness) | `61b4f47a8fe42d56b0be0ae699c3217a4e507723` |
 
 The demo consumes them the way any consumer does: it depends on them at a
 pinned revision and it carries no copy of any of them.
@@ -157,6 +159,7 @@ pinned revision and it carries no copy of any of them.
 | [`mlp-ts`](https://github.com/medialaneprotocol/mlp-ts) | the browser implementation |
 | [`mlp-proto`](https://github.com/medialaneprotocol/mlp-proto) | the wire schemas |
 | [`mlp-conformance`](https://github.com/medialaneprotocol/mlp-conformance) | the conformance corpus and its gate |
+| [`mlp-harness`](https://github.com/medialaneprotocol/mlp-harness) | the verification layer: the link model this demo's lane runs on |
 
 ## Licence
 
