@@ -13,7 +13,7 @@ publish = false
 mlp-core = { git = "https://github.com/medialaneprotocol/mlp-core", rev = "52881686c1df2770f8c3a7421002ba80ecf29979" }
 # The protocol's verification layer, pinned by revision as well: the link
 # model lives there, not in the core.
-mlp-harness = { git = "https://github.com/medialaneprotocol/mlp-harness", rev = "61b4f47a8fe42d56b0be0ae699c3217a4e507723" }
+mlp-harness = { git = "https://github.com/medialaneprotocol/mlp-harness", rev = "895f7b08ee88868427527b8ef67ec0e0a2b3f358" }
 
 [lints.rust]
 unsafe_code = "forbid"

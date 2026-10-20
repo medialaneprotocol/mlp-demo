@@ -145,7 +145,7 @@ protocol's own bytes travel inside it, untouched.
 | the protocol (the sender) | [`mlp-core`](https://github.com/medialaneprotocol/mlp-core) | `52881686c1df2770f8c3a7421002ba80ecf29979` |
 | the protocol (the browser) | [`mlp-ts`](https://github.com/medialaneprotocol/mlp-ts) | `5a4b6617fa016f5ce186fdf2e3daaff6e141b243` |
 | the wire schemas | [`mlp-proto`](https://github.com/medialaneprotocol/mlp-proto) | `40be372b94d3b6b175450f717b75312c3995c1c3` |
-| the verification layer (the link) | [`mlp-harness`](https://github.com/medialaneprotocol/mlp-harness) | `61b4f47a8fe42d56b0be0ae699c3217a4e507723` |
+| the verification layer (the link) | [`mlp-harness`](https://github.com/medialaneprotocol/mlp-harness) | `895f7b08ee88868427527b8ef67ec0e0a2b3f358` |
 
 The demo consumes them the way any consumer does: it depends on them at a
 pinned revision and it carries no copy of any of them.
