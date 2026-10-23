@@ -21,8 +21,8 @@
     "verify": "bash scripts/verify.sh"
   },
   "dependencies": {
-    "@medialaneprotocol/mlp": "github:medialaneprotocol/mlp-ts#d6eae7a93eec",
-    "@medialaneprotocol/mlp-proto": "github:medialaneprotocol/mlp-proto#2744c46856b9"
+    "@medialaneprotocol/mlp": "github:medialaneprotocol/mlp-ts#1d64345c8eb8",
+    "@medialaneprotocol/mlp-proto": "github:medialaneprotocol/mlp-proto#40be372b94d3"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
