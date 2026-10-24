@@ -179,6 +179,8 @@ impl Lane {
             anchor: decision.anchor,
             kind,
             reflects_input_seq: 0,
+            stream_id: 0,
+            path_id: 0,
             update_bytes: decision.estimated_bytes,
             echo_critical: false,
             deadline_epoch_ms: None,
