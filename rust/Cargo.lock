@@ -26,16 +26,7 @@ checksum = "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
 [[package]]
 name = "mlp-core"
 version = "0.1.0"
-source = "git+https://github.com/medialaneprotocol/mlp-core?rev=52881686c1df2770f8c3a7421002ba80ecf29979#52881686c1df2770f8c3a7421002ba80ecf29979"
-dependencies = [
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "mlp-core"
-version = "0.1.0"
-source = "git+https://github.com/medialaneprotocol/mlp-core?rev=b6d45236d57566286dd5b5493fa65741f58332a1#b6d45236d57566286dd5b5493fa65741f58332a1"
+source = "git+https://github.com/medialaneprotocol/mlp-core?rev=074cfed234d6b97a75ef91ff0e34f8623afbdcb8#074cfed234d6b97a75ef91ff0e34f8623afbdcb8"
 dependencies = [
  "serde",
  "serde_json",
@@ -45,16 +36,16 @@ dependencies = [
 name = "mlp-demo-lane"
 version = "0.1.0"
 dependencies = [
- "mlp-core 0.1.0 (git+https://github.com/medialaneprotocol/mlp-core?rev=b6d45236d57566286dd5b5493fa65741f58332a1)",
+ "mlp-core",
  "mlp-harness",
 ]
 
 [[package]]
 name = "mlp-harness"
 version = "0.1.0"
-source = "git+https://github.com/medialaneprotocol/mlp-harness?rev=895f7b08ee88868427527b8ef67ec0e0a2b3f358#895f7b08ee88868427527b8ef67ec0e0a2b3f358"
+source = "git+https://github.com/medialaneprotocol/mlp-harness?rev=41b5e6f03778b3987416c3433aac1a77d8a7273c#41b5e6f03778b3987416c3433aac1a77d8a7273c"
 dependencies = [
- "mlp-core 0.1.0 (git+https://github.com/medialaneprotocol/mlp-core?rev=52881686c1df2770f8c3a7421002ba80ecf29979)",
+ "mlp-core",
  "regex",
  "serde",
  "serde_json",
