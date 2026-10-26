@@ -10,7 +10,7 @@ publish = false
 [dependencies]
 # The published protocol, pinned by revision: the demo consumes it the way any
 # consumer does, and never carries a copy of it.
-mlp-core = { git = "https://github.com/medialaneprotocol/mlp-core", rev = "074cfed234d6b97a75ef91ff0e34f8623afbdcb8" }
+mlp-core = { git = "https://github.com/medialaneprotocol/mlp-core", rev = "c71fa1befb3284fe21c381f20bcaf5867ffad9c0" }
 # The protocol's verification layer, pinned by revision as well: the link
 # model lives there, not in the core.
 mlp-harness = { git = "https://github.com/medialaneprotocol/mlp-harness", rev = "41b5e6f03778b3987416c3433aac1a77d8a7273c" }
